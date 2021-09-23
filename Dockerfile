@@ -1,18 +1,9 @@
+FROM tomcat:8
+# Copying WAR file into webapps folder of tomcat
+COPY target/*.war /usr/local/tomcat/webapps
+
 FROM centos:7
-
-# Install Apache
 RUN yum -y update
-RUN yum -y install httpd httpd-tools
+RUN yum -y install httpd 
 
-# Install EPEL Repo
-RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
- && rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
-
-# Update Apache Configuration
-RUN sed -E -i -e '/<Directory "\/var\/www\/html">/,/<\/Directory>/s/AllowOverride None/AllowOverride All/' /etc/httpd/conf/httpd.conf
-RUN sed -E -i -e 's/DirectoryIndex (.*)$/DirectoryIndex index.php \1/g' /etc/httpd/conf/httpd.conf
-
-EXPOSE 80
-
-# Start Apache
-CMD ["/usr/sbin/httpd","-D","FOREGROUND"]
+RUN "<h1> Hello from HTTPD Server </h1>" > /var/www/html/index.html
